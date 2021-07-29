@@ -1,3 +1,15 @@
+<#
+
+    .SYNOPSIS
+       	Downloads Exclaimer for their website and checks the currently downloaded version against the version installed.
+	If the installed version is out of date; it will install the latest version.
+
+    .AUTHOR
+        Name: Micheal Thompson
+        Company: Claratti Workspace : Claratti.com
+
+#>
+
 function Get-MsiDatabaseVersion {
     param (
         [string] $fn
