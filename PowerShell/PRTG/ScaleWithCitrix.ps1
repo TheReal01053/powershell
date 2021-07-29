@@ -69,7 +69,7 @@ Function Test-Server {
     }
 }
 
-$Auth = Connect-PrtgServer monitoring.claratti.com (New-Credential prtgadmin Cl0uddcc!) -Force
+$Auth = Connect-PrtgServer monitoring.claratti.com (New-Credential username password) -Force
 
 # Iterate over Probe "Ambrose Building", get all devices where the devices name contains XD-ROOT
 
