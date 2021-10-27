@@ -1,0 +1,22 @@
+<#
+    .SYNOPSIS
+        Imports active directory users from excel spreadsheet
+    .AUTHOR
+        Name: Micheal Thompson
+        Company: Claratti Workspace : Claratti.com
+#>
+
+$ADUsers = Import-Csv (Join-Path $PSScriptRoot "ADDump.csv")
+$TemplateUser = Get-ADUser -Identity "Test"
+$OrgUnit = "OU=Shared,OU=Users,OU=Citrix,OU=HALL.LOCAL,DC=HALL,DC=LOCAL"
+
+foreach ($user in $ADusers) {
+    $Email = $user.Email
+    $FirstName = $user.FirstName
+    $LastName = $user.LastName
+    $LoginName = $user.Login
+    $Description = $user.Title
+    $Password = "Fek!883!@"
+    New-ADUser -Instance $TemplateUser -SamAccountName $LoginName -UserPrincipalName "$($LoginName)@hall.local" -Name "$($FirstName) $($LastName)" -GivenName $FirstName -Surname $LastName -Path $OrgUnit -EmailAddress $Email -Description $Description -AccountPassword (ConvertTo-SecureString $Password -AsPlainText -Force) -Enabled $True
+    Add-ADGroupMember -Identity "Citrix-S2-Shared" -Members $LoginName
+}
