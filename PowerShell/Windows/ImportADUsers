@@ -16,7 +16,7 @@ foreach ($user in $ADusers) {
     $LastName = $user.LastName
     $LoginName = $user.Login
     $Description = $user.Title
-    $Password = "Fek!883!@"
+    $Password = "\#/"
     New-ADUser -Instance $TemplateUser -SamAccountName $LoginName -UserPrincipalName "$($LoginName)@hall.local" -Name "$($FirstName) $($LastName)" -GivenName $FirstName -Surname $LastName -Path $OrgUnit -EmailAddress $Email -Description $Description -AccountPassword (ConvertTo-SecureString $Password -AsPlainText -Force) -Enabled $True
     Add-ADGroupMember -Identity "Citrix-S2-Shared" -Members $LoginName
 }
