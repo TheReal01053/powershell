@@ -11,12 +11,16 @@
 
 $Results = @()
 
-$ADUsers = Get-ADUser -Filter * -Properties Mail, Description  | ForEach-Object {
+$OrgUnit = "OU=Users,OU=hall,DC=hall,DC=local"
+
+$ADUsers = Get-ADUser -Filter * -SearchBase $OrgUnit  -Properties Mail, Description  | ForEach-Object {
 
     $Login = $_.SamAccountName
     $Name = $_.Name.Split(" ")
     $Mail = $_.Mail
     $Title = $_.Description
+
+    Write-Host $Title
 
     $userDetails = New-Object -TypeName psobject -Property @{
         Login = $Login
