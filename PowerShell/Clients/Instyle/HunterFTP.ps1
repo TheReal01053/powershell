@@ -4,7 +4,7 @@ Start-Transcript ftplog_$($Date).txt
 & "C:\Program Files (x86)\WinSCP\WinSCP.com" `
    /ini=nul `
   /command `
-    "open ftp://NTZLMT:GT8BCS@ftp.transvirtual.com.au/" `
+    "open ftp://username:password@ftp.transvirtual.com.au/" `
     "put -transfer=ascii E:\Apps\INTECH\PROGS\ftpsend\zTEST_ALAN_download_inscon_mascot*.csv" `
     "put -transfer=ascii E:\Apps\INTECH\PROGS\ftpsend\zTEST_ALAN_download_inscon_rosebery*.csv"`
     "exit"
