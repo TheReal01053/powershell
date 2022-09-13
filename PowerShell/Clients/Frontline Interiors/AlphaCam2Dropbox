@@ -102,6 +102,7 @@ Function Create-Directory {
         [string]$JobName
     )
     $exists = 0
+    $added = 0
 
     foreach ($item in $Jobs) {
         if (Test-Path $item.Dest) {
@@ -113,7 +114,12 @@ Function Create-Directory {
         } else {
             Write-Host "Creating Directories in Dropbox" -ForegroundColor Yellow
             New-Item -ItemType "directory" -Path $item.Dest | Out-Null
+            $added++
         }
+    }
+
+    if ($added -eq 4) {
+        Create-Directory $JobName
     }
 }
 
