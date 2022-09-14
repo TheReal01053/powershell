@@ -9,7 +9,7 @@
 
 $JobName = (Read-Host 'Enter A Job Name').toLower()
 
-$DropboxDir = $env:userprofile + "\Dropbox (Frontline Interiors)\CNC\Jobs\"
+$DropboxDir = $env:userprofile + "\Dropbox (Frontline Interiors)\CNC\Jobs"
 
 $Logs = "C:\Biesse\Logs"
 
@@ -18,7 +18,7 @@ $Jobs = @(
     #xml
     [PSCustomObject] @{ Name = "$($JobName)"; File = "*.xml"; Path = "C:\ALPHACAM\JOBS\$($JobName)\Nest NC Files\Progretti\"; Dest = "$($DropboxDir)\$($JobName)\biesse\progetti\" }
     #bwkl
-    [PSCustomObject] @{ Name = "$($JobName)"; File = "*.bwkl"; Path = "C:\ALPHACAM\JOBS\$($JobName)\"; Dest = "$($DropboxDir)\$($JobName)\wnc\dstn\" }
+    [PSCustomObject] @{ Name = "$($JobName)"; File = "*.bwkl"; Path = "C:\ALPHACAM\JOBS\$($JobName)\Nest NC Files\"; Dest = "$($DropboxDir)\$($JobName)\wnc\dstn\" }
     #cix
     [PSCustomObject] @{ Name = "$($JobName)"; File = "*.cix"; Path = "C:\ALPHACAM\JOBS\$($JobName)\"; Dest = "$($DropboxDir)\$($JobName)\wnc\home\d_xnc\p-p\prog\" }
     #gfx
@@ -66,24 +66,28 @@ Function Get-Jobs
 
     foreach($item in $Jobs) {
 
-
-       Get-ChildItem -Filter $item.File -Path $item.Path -ErrorAction SilentlyContinue | ? {
-
-            $Name = $_.Name.toLower()
+         Get-ChildItem -Filter $item.File -Path $item.Path -Recurse -ErrorAction SilentlyContinue | ? {
+                $Name = $_.Name.toLower()
            
 
-            $EndIndex = $JobName.Length
+                $EndIndex = $JobName.Length
 
-            $TempName = If ($Name.Length -ge $EndIndex) { $Name.Substring(0, $EndIndex) } Else {""}
-            #Write-Host $Name
+                $TempName = If ($Name.Length -ge $EndIndex) { $Name.Substring(0, $EndIndex) } Else {""}
+                #Write-Host $_.FullName
 
-            if ($TempName -eq $JobName) {
-                #Write-Host $TempName
-                $TempName -eq $JobName
-            }
+                if ($TempName -eq $JobName) {
+                    #Write-Host $TempName
+                    $TempName -eq $JobName
+                }
 
-            Get-Copy -Name $Name -Filter $item.File -SourcePath (Join-Path $item.Path $Name) -DestPath $item.Dest
-       }
+                if ($item.File -like "*.cix*") {
+                    Get-Copy -Name $Name -Filter $item.File -SourcePath $_.FullName -DestPath $item.Dest
+                } else {
+                    Get-Copy -Name $Name -Filter $item.File -SourcePath (Join-Path $item.Path $Name) -DestPath $item.Dest
+                }
+            
+        
+        }
     
     }
 
