@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 <#
     .SYNOPSIS
     Transfers specified job folder and contents to dropbox
