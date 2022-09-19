@@ -1,0 +1,137 @@
+
+
+
+
+
+
+
+
+
+<#
+    .SYNOPSIS
+    Transfers specified job folder and contents to dropbox
+
+    .DESCRIPTION
+    Transfers specified job folder and contents to dropbox from setout machine 
+    it will then delete the transferred job folder & contents from the setout machine
+#>
+
+$JobName = (Read-Host 'Enter A Job Name')
+
+$DropboxDir = $env:userprofile + "\Dropbox (Frontline Interiors)\CNC\Jobs\"
+
+$Jobs = @(
+
+    #xml
+    [PSCustomObject] @{ Name = "$($JobName)"; File = "*.xml"; Path = "$($DropboxDir)\$($JobName)\biesse\progetti\"; Dest = "C:\Biesse\BiesseWorks\Nesting\progetti\$($JobName)" }
+    #bwkl
+    #[PSCustomObject] @{ Name = "$($JobName)"; File = "*.bwkl"; Path = "$($DropboxDir)\$($JobName)\wnc\dstn\"; Dest = "C:\wnc\home\d_xnc\p_p\dstn\$($JobName)" }
+    #cix
+    [PSCustomObject] @{ Name = "$($JobName)"; File = "*.cix"; Path = "$($DropboxDir)\$($JobName)\wnc\home\d_xnc\p-p\prog\"; Dest = "c:\wnc\home\d_xnc\p_p\prog\$($JobName)" }
+    #gfx
+    [PSCustomObject] @{ Name = "$($JobName)"; File = "*.*"; Path = "$($DropboxDir)\$($JobName)\biesse\biesseworks\utils\ledit\mixeddata\stdGrafic\"; Dest = "c:\biesse\biesseworks\utils\ledit\mixeddata\stdgrafic\$($JobName)" }
+)
+
+#Function not currently used
+Function Get-CleanJobs 
+{
+   Param
+   (
+        [Parameter(Mandatory=$true, Position=0)]
+        [string]$Path
+   )
+   if (Test-Path $Path) {
+        Remove-Item $Path -Recurse -Force
+   }
+   Write-Host 'Cleaned up jobs directory'
+   Write-Host 'Job transfer completed successfully'
+}
+
+Function Get-Copy 
+{
+    Param
+    (
+        [Parameter(Mandatory=$true, Position=0)]
+        [string]$Name,
+        [Parameter(Mandatory=$true, Position=1)]
+        [string]$Filter,
+        [Parameter(Mandatory=$true, Position=2)]
+        [string]$SourcePath,
+        [Parameter(Mandatory=$true, Position=3)]
+        [string]$DestPath
+
+    )
+
+    Copy-Item -Filter $Filter -Path $SourcePath -Destination $DestPath -Recurse -ErrorAction SilentlyContinue
+    Write-Host "$($Name) has been successfully copied to $($DestPath)" -ForegroundColor Green
+}
+
+Function Get-Jobs
+{
+
+    Start-Transcript -Path (Join-Path $env:LOCALAPPDATA "temp\setout2cnclogs\$($JobName)_Log.log")
+
+    foreach($item in $Jobs) {
+
+         Get-ChildItem -Filter $item.File -Path $item.Path -Recurse -ErrorAction SilentlyContinue | ? {
+                $Name = $_.Name.toLower()
+           
+
+                $EndIndex = $JobName.Length
+
+                $TempName = If ($Name.Length -ge $EndIndex) { $Name.Substring(0, $EndIndex) } Else {""}
+                #Write-Host $_.FullName
+
+                if ($TempName -eq $JobName) {
+                    #Write-Host $TempName
+                    $TempName -eq $JobName
+                }
+
+                if ($item.File -like "*.cix*") {
+                    Get-Copy -Name $Name -Filter $item.File -SourcePath $_.FullName -DestPath $item.Dest
+                } else {
+                    Get-Copy -Name $Name -Filter $item.File -SourcePath (Join-Path $item.Path $Name) -DestPath $item.Dest
+                }
+            
+        
+        }
+    
+    }
+
+    Write-Host "Completed transferring job to Dropbox" -ForegroundColor Yellow
+    Stop-Transcript
+    #Read-Host 'Press Enter to Exit'
+    pause
+    exit
+}
+
+Function Create-Directory {
+
+    Param
+    (
+        [Parameter(Mandatory=$true, Position=0)]
+        [string]$JobName
+    )
+    $exists = 0
+    $added = 0
+
+    foreach ($item in $Jobs) {
+        if (Test-Path $item.Dest) {
+            $exists++
+            Write-Host $exists
+            if ($exists -eq 3) {
+                Get-Jobs
+            }
+        } else {
+            Write-Host "Creating Directories in Dropbox" -ForegroundColor Yellow
+            New-Item -ItemType "directory" -Path $item.Dest | Out-Null
+            $added++
+        }
+    }
+
+    if ($added -eq 3) {
+        Create-Directory $JobName
+    }
+}
+
+Create-Directory $JobName
