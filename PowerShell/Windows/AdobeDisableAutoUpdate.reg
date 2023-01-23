@@ -1,0 +1,50 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe Acrobat\7.0\FeatureLockdown]
+"bProtectedMode"=dword:00000000
+"bUpdater"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe Acrobat\7.0\FeatureLockdown\cServices]
+"bUpdater"=dword:00000000
+"bProtectedMode"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe Acrobat\8.0\FeatureLockdown]
+"bProtectedMode"=dword:00000000
+"bUpdater"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe Acrobat\8.0\FeatureLockdown\cServices]
+"bUpdater"=dword:00000000
+"bProtectedMode"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe Acrobat\9.0\FeatureLockdown]
+"bProtectedMode"=dword:00000000
+"bUpdater"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe Acrobat\9.0\FeatureLockdown\cServices]
+"bUpdater"=dword:00000000
+"bProtectedMode"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe Acrobat\10.0\FeatureLockdown]
+"bProtectedMode"=dword:00000000
+"bUpdater"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe Acrobat\10.0\FeatureLockdown\cServices]
+"bUpdater"=dword:00000000
+"bProtectedMode"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe Acrobat\11.0\FeatureLockdown]
+"bProtectedMode"=dword:00000000
+"bUpdater"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe Acrobat\11.0\FeatureLockdown\cServices]
+"bUpdater"=dword:00000000
+"bProtectedMode"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe Acrobat\DC\FeatureLockdown]
+"bProtectedMode"=dword:00000000
+"bUpdater"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe Acrobat\DC\FeatureLockdown\cServices]
+"bUpdater"=dword:00000000
+"bProtectedMode"=dword:00000000
+
