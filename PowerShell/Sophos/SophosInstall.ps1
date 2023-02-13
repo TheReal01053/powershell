@@ -16,8 +16,8 @@
 #>
 
 
-$Defender = (Get-ItemPropertyValue -Path 'HKLM:\SOFTWARE\MICROSOFT\WINDOWS\CurrentVersion\Uninstall\Endpoint Security' -Name UninstallString).Replace("`"", "")
-$SophosKey = (Get-ItemPropertyValue -Path 'HKLM:\SOFTWARE\MICROSOFT\WINDOWS\CurrentVersion\Uninstall\Sophos Endpoint Agent' -Name UninstallString).Replace("`"", "")
+$DefenderKey = (Test-Path 'HKLM:\SOFTWARE\MICROSOFT\WINDOWS\CurrentVersion\Uninstall\Endpoint Security')
+$SophosKey = (Test-Path 'HKLM:\SOFTWARE\MICROSOFT\WINDOWS\CurrentVersion\Uninstall\Sophos Endpoint Agent')
 $SophosURL = 'https://github.com/Claratti/Sophos/raw/main/HALL_SOPHOS.exe'
 $OutPath = "$($env:LOCALAPPDATA)\SophosInstall"
 
@@ -28,14 +28,14 @@ if (!(Test-Path $OutPath)) {
     Start-Sleep -Seconds 2
 }
 
-if (!(Test-Path $Defender)) {
+if (!($DefenderKey)) {
 
-    if (Test-Path $SophosKey) {
+    if ($SophosKey) {
         Write-Host 'Sophos antivirus is already installed... this will try again later! Ensure Sophos antivirus is uninstalled before execution.' -ForegroundColor Red
         return
     }
 
-    Invoke-WebRequest -Uri $Sophos -OutFile "$($OutPath)\sophos.exe"
+    Invoke-WebRequest -Uri $SophosURL -OutFile "$($OutPath)\sophos.exe"
 
     Start-Sleep -Seconds 15
 
